@@ -2,7 +2,6 @@ package hw02unpackstring
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"unicode"
 )
@@ -37,9 +36,4 @@ func Unpack(str string) (string, error) {
 		}
 	}
 	return sb.String(), nil
-}
-
-func main() {
-	line, _ := Unpack("d\n5abc")
-	fmt.Print(line)
 }
