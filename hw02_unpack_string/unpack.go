@@ -1,4 +1,4 @@
-package main
+package hw02unpackstring
 
 import (
 	"errors"
@@ -10,9 +10,7 @@ import (
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(str string) (string, error) {
-	// Place your code here.
 	runeSlice := []rune(str)
-	var sb strings.Builder
 	ln := len(runeSlice)
 	if ln == 0 {
 		return "", nil
@@ -20,11 +18,13 @@ func Unpack(str string) (string, error) {
 	if unicode.IsDigit(runeSlice[0]) {
 		return "", ErrInvalidString
 	}
+	var sb strings.Builder
 	for i := 0; i < ln; i++ {
 		if i+1 < ln {
 			if unicode.IsDigit(runeSlice[i]) && unicode.IsDigit(runeSlice[i+1]) {
 				return "", ErrInvalidString
 			}
+			// Checking zero exist in the current and next rune.
 			if runeSlice[i+1] == 48 || runeSlice[i] == 48 {
 				continue
 			} else if unicode.IsDigit(runeSlice[i]) {
@@ -32,9 +32,10 @@ func Unpack(str string) (string, error) {
 				continue
 			}
 		}
-		sb.WriteString(string(runeSlice[i]))
+		if runeSlice[i] != 48 {
+			sb.WriteString(string(runeSlice[i]))
+		}
 	}
-
 	return sb.String(), nil
 }
 
