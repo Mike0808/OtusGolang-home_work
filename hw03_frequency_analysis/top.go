@@ -11,7 +11,7 @@ type Words struct {
 	Count int
 }
 
-var t1 = regexp.MustCompile(`[^\wа-яА-Я-]`)
+var t1 = regexp.MustCompile(`[^\wа-яА-Я-_]`)
 
 var t2 = regexp.MustCompile(`\s`)
 
@@ -22,7 +22,7 @@ func Top10(s string, taskWithAsteriskIsCompleted bool) []string {
 	v2 := t2.Split(s, -1)
 	if taskWithAsteriskIsCompleted {
 		for _, sl := range v1 {
-			if sl != "" && sl != "-" {
+			if sl != "" && sl != "-" && sl != "_" {
 				counts[strings.ToLower(sl)]++
 			}
 		}

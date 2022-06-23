@@ -43,9 +43,79 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
+var textEngRus = `The voice spoke again. 
+Голос заговорил снова: 
+“I can’t hardly move with all these creeper things.” 
+– Двинуться не дают, ух и цопкие они! 
+The owner of the voice came backing out of the undergrowth so that twigs scratched on a greasy wind-breaker.
+Тот, кому принадлежал голос, задом выбирался из кустов, с трудом выдирая у них свою грязную куртку.
+The naked crooks of his knees were plump, caught and scratched by thorns.
+Пухлые голые ноги коленками застряли в шипах и были все расцарапаны.
+He bent down, removed the thorns carefully, and turned round.
+Он наклонился, осторожно отцепил шипы и повернулся.
+He was shorter than the fair boy and very fat.
+Он был ниже светлого и очень толстый.
+He came forward, searching out safe lodgments for his feet, and then looked up through thick spectacles. 
+Сделал шаг, нащупав безопасную позицию, и глянул сквозь толстые очки. 
+“Where’s the man with the megaphone?” 
+– А где же дядька, который с мегафоном? 
+The fair boy shook his head. 
+Светлый покачал головой: 
+“This is an island.
+– Это остров.
+At least I think it’s an island.
+Так мне по крайней мере кажется.
+That’s a reef out in the sea.
+А там риф.
+Perhaps there aren’t any grownups anywhere.” 
+Может, даже тут вообще взрослых нет. 
+The fat boy looked startled. `
+
+var textSymbols = ",,,~~~ ~!@#$%^ &*()_ _ _ +?><} {.[]'\\"
+
+var textDiff = "Привет пРивет привет? Привет, привет, ПРИВЕТ привет: приветы привета"
+
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
 		require.Len(t, Top10("", taskWithAsteriskIsCompleted), 0)
+	})
+	t.Run("symbols", func(t *testing.T) {
+		require.Len(t, Top10(textSymbols, taskWithAsteriskIsCompleted), 0)
+	})
+	t.Run("Different words - positive", func(t *testing.T) {
+		require.Len(t, Top10(textDiff, false), 9)
+	})
+
+	t.Run("Russian English text", func(t *testing.T) {
+		if taskWithAsteriskIsCompleted {
+			expected := []string{
+				"the",
+				"и",
+				"and",
+				"boy",
+				"he",
+				"his",
+				"of",
+				"out",
+				"s",
+				"a",
+			}
+			require.Equal(t, expected, Top10(textEngRus, taskWithAsteriskIsCompleted))
+		} else {
+			expected := []string{
+				"the",
+				"The",
+				"и",
+				"and",
+				"He",
+				"boy",
+				"his",
+				"of",
+				"out",
+				"–",
+			}
+			require.Equal(t, expected, Top10(textEngRus, taskWithAsteriskIsCompleted))
+		}
 	})
 
 	t.Run("positive test", func(t *testing.T) {
