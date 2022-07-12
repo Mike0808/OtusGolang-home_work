@@ -46,10 +46,7 @@ func (c *lruCache) Get(key Key) (interface{}, bool) {
 
 func (c *lruCache) Clear() {
 	c.items = make(map[Key]*ListItem)
-	c.queue.(*List).list = nil
-	c.queue.(*List).len = 0
-	c.queue.(*List).root.Prev = nil
-	c.queue.(*List).root.Next = nil
+	c.queue = NewList()
 }
 
 type cacheItem struct {
