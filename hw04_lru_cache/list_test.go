@@ -9,7 +9,6 @@ import (
 func TestList(t *testing.T) {
 	t.Run("empty list", func(t *testing.T) {
 		l := NewList()
-
 		require.Equal(t, 0, l.Len())
 		require.Nil(t, l.Front())
 		require.Nil(t, l.Back())
@@ -23,8 +22,16 @@ func TestList(t *testing.T) {
 		l.PushBack(30)  // [10, 20, 30]
 		require.Equal(t, 3, l.Len())
 
-		middle := l.Front().Next // 20
-		l.Remove(middle)         // [10, 30]
+		l.PushFront(nil)
+		require.Equal(t, 4, l.Len())
+		l.MoveToFront(l.Front().Next)
+
+		middle1 := l.Front().Next // nil
+		l.Remove(middle1)         // [10, 20, 30]
+		require.Equal(t, 3, l.Len())
+
+		middle2 := l.Front().Next // nil
+		l.Remove(middle2)         // [10, 30]
 		require.Equal(t, 2, l.Len())
 
 		for i, v := range [...]int{40, 50, 60, 70, 80} {
@@ -40,7 +47,9 @@ func TestList(t *testing.T) {
 		require.Equal(t, 70, l.Back().Value)
 
 		l.MoveToFront(l.Front()) // [80, 60, 40, 10, 30, 50, 70]
-		l.MoveToFront(l.Back())  // [70, 80, 60, 40, 10, 30, 50]
+		lastTemp := l.last.Prev
+		l.MoveToFront(l.Back()) // [70, 80, 60, 40, 10, 30, 50]
+		require.Equal(t, lastTemp, l.last)
 
 		elems := make([]int, 0, l.Len())
 		for i := l.Front(); i != nil; i = i.Next {
